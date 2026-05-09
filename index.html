@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer & Scorer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-top">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Elevate<span>CV</span>
+                </div>
+                <div class="api-settings">
+                    <input type="password" id="gemini-api-key" placeholder="Enter Gemini API Key">
+                    <span id="api-status" class="status-indicator"></span>
+                </div>
+            </div>
+            <h1>Resume Analysis & Scoring</h1>
+            <p>Identify critical gaps, calculate your ATS score, and get human-friendly bullet point rewrites.</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="input-group">
+                    <label for="target-job">Target Job Title or Description (Optional but Recommended)</label>
+                    <textarea id="target-job" placeholder="e.g. Senior Frontend Developer at Google. Requires React, TypeScript, and system design experience."></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="resume-text">Paste Your Raw Resume Text</label>
+                    <textarea id="resume-text" placeholder="John Doe&#10;Software Engineer&#10;&#10;Experience:&#10;- Fixed bugs in the codebase&#10;- Managed a database..."></textarea>
+                </div>
+
+                <button id="analyze-btn" class="btn primary">Run Complete Analysis</button>
+            </section>
+
+            <section id="loading-section" class="loading-section hidden">
+                <div class="spinner"></div>
+                <p>Analyzing phrasing, checking ATS compliance, and writing fixes...</p>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <!-- Injected via JS -->
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
