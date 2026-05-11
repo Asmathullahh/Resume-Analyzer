@@ -231,3 +231,8 @@ textarea:focus {
     color: var(--text-main);
     font-style: italic;
 }
+
+.file-upload-wrapper { position: relative; display: inline-block; margin-bottom: 1rem; overflow: hidden; background: var(--bg-main); border: 1px dashed var(--primary); border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; transition: all 0.2s; }
+.file-upload-wrapper:hover { background: #eff6ff; }
+.file-input { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; }
+#upload-status { font-size: 0.9rem; color: var(--primary); font-weight: 500; }

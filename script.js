@@ -38,6 +38,62 @@ document.addEventListener('DOMContentLoaded', () => {
     resumeTextInput.addEventListener('input', checkReady);
     apiKeyInput.addEventListener('input', checkReady);
 
+    // File Upload Logic
+    const resumeUpload = document.getElementById('resume-upload');
+    const uploadStatus = document.getElementById('upload-status');
+
+    resumeUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        uploadStatus.textContent = `Reading ${file.name}...`;
+
+        if (file.name.endsWith('.docx')) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const arrayBuffer = event.target.result;
+                mammoth.extractRawText({arrayBuffer: arrayBuffer})
+                    .then(function(result) {
+                        resumeTextInput.value = result.value;
+                        uploadStatus.textContent = `Loaded ${file.name} successfully!`;
+                        checkReady();
+                    })
+                    .catch(function(err) {
+                        uploadStatus.textContent = `Error reading .docx file.`;
+                    });
+            };
+            reader.readAsArrayBuffer(file);
+        } else if (file.name.endsWith('.txt')) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                resumeTextInput.value = event.target.result;
+                uploadStatus.textContent = `Loaded ${file.name} successfully!`;
+                checkReady();
+            };
+            reader.readAsText(file);
+        } else {
+            uploadStatus.textContent = `Unsupported file type. Please use .docx or .txt`;
+        }
+    });
+
+    // Helper function to scrape URL if provided
+    async function getJobDescription(inputString) {
+        if (inputString.match(/^https?:\/\//)) {
+            try {
+                // Use allOrigins CORS proxy to fetch the HTML
+                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(inputString)}`);
+                const data = await response.json();
+                
+                // Very basic HTML to Text extraction (strip tags)
+                const doc = new DOMParser().parseFromString(data.contents, 'text/html');
+                return doc.body.textContent.replace(/\s+/g, ' ').trim();
+            } catch (err) {
+                return `Failed to scrape URL. Proceeding with raw URL as context: ${inputString}`;
+            }
+        }
+        return inputString; // It's just text
+    }
+
     analyzeBtn.addEventListener('click', async () => {
         const apiKey = apiKeyInput.value.trim();
         const resumeText = resumeTextInput.value.trim();
@@ -47,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
         analyzeBtn.disabled = true;
         resultsSection.classList.add('hidden');
         loadingSection.classList.remove('hidden');
+
+        // Scrape URL if necessary
+        const targetJobContext = await getJobDescription(targetJob);
 
         // Construct the highly structured prompt
         const prompt = `You are an expert Executive Recruiter and ATS (Applicant Tracking System) Specialist.
@@ -72,7 +131,7 @@ Example:
 
 ---
 **Target Job Description:**
-${targetJob || "No specific job provided. Score based on general industry best practices."}
+${targetJobContext || "No specific job provided. Score based on general industry best practices."}
 
 **Candidate's Raw Resume:**
 ${resumeText}`;

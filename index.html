@@ -27,12 +27,16 @@
         <main>
             <section class="input-section">
                 <div class="input-group">
-                    <label for="target-job">Target Job Title or Description (Optional but Recommended)</label>
-                    <textarea id="target-job" placeholder="e.g. Senior Frontend Developer at Google. Requires React, TypeScript, and system design experience."></textarea>
+                    <label for="target-job">Target Job Title, Description, or URL (Optional)</label>
+                    <textarea id="target-job" placeholder="e.g. Senior Frontend Developer at Google... OR paste a link to the job posting like https://linkedin.com/jobs/view/123"></textarea>
                 </div>
                 
                 <div class="input-group">
-                    <label for="resume-text">Paste Your Raw Resume Text</label>
+                    <label for="resume-text">Paste Resume Text or Upload a Document</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="resume-upload" accept=".docx,.txt" class="file-input">
+                        <span id="upload-status">Upload .docx or .txt</span>
+                    </div>
                     <textarea id="resume-text" placeholder="John Doe&#10;Software Engineer&#10;&#10;Experience:&#10;- Fixed bugs in the codebase&#10;- Managed a database..."></textarea>
                 </div>
 
@@ -51,6 +55,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
